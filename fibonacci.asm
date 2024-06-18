@@ -59,13 +59,11 @@ main:
     syscall
     
 imprimir:
-    #move $t0, $s0
-    
     li $v0, 4
     syscall
     
     li $v0, 1        
-    move $a0, $s1   
+    move $a0, $s4   
     syscall
     
     jr $ra
