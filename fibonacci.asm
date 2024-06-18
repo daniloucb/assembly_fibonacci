@@ -14,48 +14,39 @@ main:
     li $a0, 30       
     jal fibonacci   
     move $s1, $v0    
-
+    
     # Imprime o valor do 30º termo
-    li $v0, 4       
-    la $a0, msg30    
-    syscall
-    li $v0, 1        
-    move $a0, $s1   
-    syscall
-
+    la $a0, msg30
+    move $s4, $s1
+    jal imprimir
+    
     # Calcula o 40º termo da sequência de Fibonacci
     li $a0, 40      
     jal fibonacci    
-    move $s3, $v0    
-
+    move $s3, $v0   
+    
+    jal razaoAurea
+    
     # Imprime o valor do 40º termo
-    li $v0, 4        
-    la $a0, msg40    
-    syscall
-    li $v0, 1        
-    move $a0, $s3    
-    syscall
+    la $a0, msg40
+    move $s4, $s3
+    jal imprimir
 
     # Calcula o 41º termo da sequência de Fibonacci
     li $a0, 41       
     jal fibonacci    
-    move $s2, $v0    
-
+    move $s2, $v0 
+    
+    li $s4, 0 #limpar o $s4
+    
+    jal razaoAurea
+    
     # Imprime o valor do 41º termo
-    li $v0, 4        
-    la $a0, msg41   
-    syscall
-    li $v0, 1        
-    move $a0, $s2    
-    syscall
+    la $a0, msg41
+    move $s4, $s2
+    jal imprimir
 
-    # Calcula a razão áurea (phi)
-    mtc1 $s2, $f2     
-    mtc1 $s3, $f4     
-    cvt.s.w $f2, $f2  
-    cvt.s.w $f4, $f4  
-    div.s $f0, $f2, $f4  # $f0 = $f2 / $f4 (phi)
-
+    
     # Imprime a razão áurea (phi)
     li $v0, 4         
     la $a0, msgPhi    
@@ -66,6 +57,27 @@ main:
 
     li $v0, 10        
     syscall
+    
+imprimir:
+    #move $t0, $s0
+    
+    li $v0, 4
+    syscall
+    
+    li $v0, 1        
+    move $a0, $s1   
+    syscall
+    
+    jr $ra
+    
+razaoAurea:
+    mtc1 $s2, $f2     
+    mtc1 $s3, $f4     
+    cvt.s.w $f2, $f2  
+    cvt.s.w $f4, $f4  
+    div.s $f0, $f2, $f4  
+    
+    jr $ra 
 
 fibonacci:
     addi $sp, $sp, -8  
@@ -94,4 +106,4 @@ fib_exit:
     lw $ra, 4($sp)     
     lw $a1, 0($sp)     
     addi $sp, $sp, 8   
-    jr $ra            
+    jr $ra     
